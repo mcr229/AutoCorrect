@@ -1,0 +1,68 @@
+Testing of the BackEnd
+
+EdgeCases and Test Cases used to Test GET and POST in the BackEnd
+
+GET():
+
+Inserted Nothing
+#Getting links from empty compareTree
+    - http://127.0.0.1:5000/auto-correct/?link=hello
+    - Outputted {"links": []}
+
+Inserted "cuair", "hello"
+#Getting no compareable links
+    - http://127.0.0.1:5000/auto-correct/?link=asdf
+    - Outputted {"links": []}
+
+Inserted "cuair", "hello"
+#Getting no argument for link
+    - http://127.0.0.1:5000/auto-correct/?link=
+    - Outputted {"links": []}
+
+Inserted "cuair", "hello"
+#Getting where link is spelled wrong
+    - http://127.0.0.1:5000/auto-correct/?links=asdf
+    - Bad Request - aborted with 400
+
+Inserted Nothing
+#Getting where the url is spelled incorrectly
+    - http://127.0.0.1:5000/auto-correct/?link=asdf
+    - Not Found - aborted with 404
+
+Inserted "CUair", "fair", "plane", "place", "cuair"
+#Getting the correct words from the compare compareTree
+    - http://127.0.0.1:5000/auto-correct/?link=lair
+    - {"links": ["cuair", "fair"]}
+ 
+
+
+POST():
+
+#Invalid link
+    - http://127.0.0.1:5000/insert-wo/
+    - Not Found - aborted with 404
+
+#No JSON requested
+    - http://127.0.0.1:5000/insert-words/
+    - Bad Request - aborted with 400
+
+#JSON does not have links key
+    - http://127.0.0.1:5000/insert-words/
+    - JSON = {"hi":["cuair"]}
+    - Bad Request - aborted with 403
+
+#JSON links key is not a list
+    - http://127.0.0.1:5000/insert-words/
+    - JSON = {"links": "cuair"}
+    - Bad Request - aborted with 403
+
+#JSON links list does not have all strings
+    - http://127.0.0.1:5000/insert-words/
+    - JSON = {"links": [1, "r"]}
+    - Bad Request - aborted with 403
+
+#Regular links in a standard json with "links" key
+    - http://127.0.0.1:5000/insert-words/
+    - JSON = {"links": ["cuair", "fair", "plane", "place"]}
+    - Response = {"closest_parent": ["none", "cuair", "cuair", "plane"}]}
+

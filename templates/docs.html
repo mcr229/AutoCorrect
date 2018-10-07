@@ -1,0 +1,44 @@
+<h1 id="backendautocorrectdocumentation">Backend Auto-Correct Documentation</h1>
+
+<p>The backend uses two different routes for getting and inserting words
+into our compare tree. The first route is GET /auto-correct/?link=<value> This will take the query parameter “link” and should respond with a JSON object that has all words within a distance &lt;= 2 away from the query word. The query parameter value “slokk”, for example, should be “slack” if we want to navigate to the CUAir slack, NOT “cuair/slack”! 
+The second route is POST /insert-words This will take a JSON object with an array called “links”, that will load valid links into the wordTree. It responds with a JSON object that contains a list of parent node strings. If the word wasn’t inserted, the string should be “not_inserted”. If the node became the root and doesn’t have a parent, the string should be “none”.</p>
+
+<h2 id="usageofgettinglinks">Usage of Getting links</h2>
+
+<p><strong>Definition</strong>
+<code>GET links</code></p>
+
+<p><strong>Response</strong></p>
+
+<ul>
+<li><code>200 OK</code> on success</li>
+</ul>
+
+<pre><code class="json language-json">{
+    "links" : "String List holding all available links"
+}
+</code></pre>
+
+<h3 id="addingwordstoourcollectionofuseablelinks">Adding words to our collection of useable links</h3>
+
+<p><strong>Definition</strong>
+<code>POST links</code></p>
+
+<p><strong>Arguments</strong></p>
+
+<ul>
+<li>"json": containing a key value of links holding a string list of all links</li>
+
+<li>"links": list string of all unique links within the json that we wish to add 
+        to the tree</li>
+</ul>
+
+<p><strong>Response</strong></p>
+
+<p>-<code>201 Created</code> on success</p>
+
+<p>```json
+{
+    "closest<em>parent" : ['none', 'cuair', 'cuair', 'plane', 'not</em>inserted']
+}</p>
